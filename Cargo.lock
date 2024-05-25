@@ -396,6 +396,7 @@ dependencies = [
  "chrono",
  "headers",
  "once_cell",
+ "serde",
  "serde_json",
  "sysinfo",
  "tiny_http",
