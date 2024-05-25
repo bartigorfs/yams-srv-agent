@@ -60,7 +60,7 @@ pub struct ProcessInfo<'a> {
     pub(crate) mem_usage: u64,
     pub(crate) virt_mem_usage: u64,
     pub(crate) proc_path: Option<&'a Path>,
-    pub(crate) parent_pid: Option<Pid>,
+    pub(crate) parent_pid: Option<u32>,
     pub(crate) workdir: Option<&'a Path>,
     pub(crate) run_time: u64,
     pub(crate) start_time: u64,
@@ -69,4 +69,4 @@ pub struct ProcessInfo<'a> {
 
 #[derive(Serialize)]
 // Struct copy from sysinfo to implement Serde traits
-pub struct Pid(pub i32);
+pub struct Pid(pub u32);
