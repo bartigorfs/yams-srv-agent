@@ -1,3 +1,4 @@
+use std::fmt::format;
 use tiny_http::{Server};
 use chrono::prelude::*;
 use sysinfo::System;
@@ -9,8 +10,10 @@ mod middleware;
 mod config;
 
 fn main() {
-    let server: Server = Server::http("0.0.0.0:8000").unwrap();
-    let message = format!("{tz} Server started on {port}", port = 8000, tz = Utc::now());
+    let config: models::Config = config::load_config();
+
+    let server: Server = Server::http(format!("{}:{}", config.host, config.port)).unwrap();
+    let message = format!("{tz} Server started on {}", config.port, tz = Utc::now());
     //logger::write_to_log(message.clone()); #Later homie
     println!("{}", message);
 

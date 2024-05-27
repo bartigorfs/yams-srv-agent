@@ -87,6 +87,19 @@ pub fn handle_status_request(request: Request) {
         });
     }
 
+    //TODO: Replace with converter
+    let components: Components = Components::new_with_refreshed_list();
+    let mut components_vec: Vec<models::components::Component> = vec![];
+
+    for (component) in &components {
+        components_vec.push(models::components::Component {
+            temperature: component.temperature(),
+            max: component.max(),
+            critical: component.critical(),
+            label: component.label().parse().unwrap(),
+        });
+    }
+
     let sys_info = json!({
         "system": {
             "name": System::name().unwrap(),
@@ -106,12 +119,9 @@ pub fn handle_status_request(request: Request) {
         "processes": process_info_vec,
         "disks": disks_vec,
         "networks": networks_vec,
-        //"components": Components::new_with_refreshed_list(),
+        "components": components_vec,
     });
 
-    let components: Components = Components::new_with_refreshed_list();
-
-    println!("{:?}", components);
 
     let mut response = Response::from_string(sys_info.to_string());
     response.add_header(models::JSON_HEADER.clone());

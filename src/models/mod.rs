@@ -3,11 +3,18 @@ use std::string::ToString;
 use ascii::AsciiString;
 use tiny_http::{Header, HeaderField};
 use once_cell::sync::Lazy;
-use serde::{Serialize};
+use serde::{Deserialize, Serialize};
 
 pub mod process;
 pub mod disks;
 pub mod networks;
+pub mod components;
+
+#[derive(Debug, Deserialize)]
+pub(crate) struct Config {
+    pub(crate) host: String,
+    pub(crate) port: String,
+}
 
 fn create_ascii_string(s: String) -> AsciiString {
     match AsciiString::from_str(&*s) {
