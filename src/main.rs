@@ -1,18 +1,19 @@
+use std::collections::HashSet;
 use std::env;
 use std::net::SocketAddr;
+use std::sync::Arc;
+
 use chrono::prelude::*;
 use dotenv::dotenv;
 use lazy_static::lazy_static;
 use tokio::net::TcpListener;
-use tokio::sync::{watch, Mutex};
+use tokio::sync::watch;
 
 use crate::models::app::AppConfig;
 use crate::util::graceful_util::get_graceful_signal;
 
-mod logger;
 mod models;
 mod handler;
-mod middleware;
 mod util;
 
 lazy_static! {
@@ -31,7 +32,17 @@ lazy_static! {
             .map(|s| s.parse::<u16>().unwrap_or(0))
             .collect::<Vec<u16>>();
 
+        let trusted_origins_str: String =
+            env::var("TRUSTED_ORIGINS").expect("TRUSTED_ORIGINS must be set.");
+
+        let trusted_origins: HashSet<String> = trusted_origins_str
+            .split(',')
+            .map(|origin| origin.to_string())
+            .collect();
+
+
          AppConfig {
+            trusted_origins: Arc::new(trusted_origins),
             host: host_array,
             port: app_port,
         }
