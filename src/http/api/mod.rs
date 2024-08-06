@@ -7,30 +7,25 @@ use hyper::server::conn::http1;
 use hyper::service::service_fn;
 use hyper::Request;
 use hyper_util::rt::TokioIo;
-use sqlx::{Pool, Sqlite};
 use std::sync::Arc;
 use tokio::net::TcpListener;
-use tokio::sync::Mutex;
 use tower::ServiceBuilder;
 
 pub async fn run_server(
     listener: TcpListener,
-    pool: Arc<Mutex<Pool<Sqlite>>>,
     shutdown_rx: &mut tokio::sync::watch::Receiver<()>,
 ) {
     loop {
         tokio::select! {
             Ok((stream, addr)) = listener.accept() => {
                 let io = TokioIo::new(stream);
-                let pool = Arc::clone(&pool);
 
         tokio::task::spawn(async move {
            let config: &AppConfig = get_app_config().await;
 
            let svc = service_fn(move |req: Request<hyper::body::Incoming>| {
-                        let pool = Arc::clone(&pool);
                         async move {
-                            router(pool, req).await
+                            router(req).await
                         }
                     });
 

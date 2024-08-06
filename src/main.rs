@@ -8,13 +8,14 @@ use dotenv::dotenv;
 use lazy_static::lazy_static;
 use tokio::net::TcpListener;
 use tokio::sync::watch;
-
+use crate::http::api::run_server;
 use crate::models::app::AppConfig;
 use crate::util::graceful_util::get_graceful_signal;
 
 mod models;
 mod handler;
 mod util;
+mod http;
 
 lazy_static! {
     static ref APP_CONFIG: AppConfig = {
@@ -70,7 +71,7 @@ async fn main() -> std::io::Result<()> {
         _ = shutdown_signal => {
             println!("Received shutdown signal");
         }
-        _ = run_server(listener, pool.clone(), &mut shutdown_rx) => {
+        _ = run_server(listener, &mut shutdown_rx) => {
             println!("Server exited");
         }
     }

@@ -8,6 +8,8 @@ use sysinfo::{Components, Disks, Networks, Pid, Process, ProcessStatus, System};
 use tiny_http::{Request, Response};
 use crate::{logger, models};
 
+//let params = Url::parse(&request.uri().to_string()).unwrap().query_pairs();
+
 pub fn handle_status_request(request: Request) {
     let utc: DateTime<Utc> = Utc::now();
 
