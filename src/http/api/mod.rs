@@ -23,11 +23,7 @@ pub async fn run_server(
         tokio::task::spawn(async move {
            let config: &AppConfig = get_app_config().await;
 
-           let svc = service_fn(move |req: Request<hyper::body::Incoming>| {
-                        async move {
-                            router(req).await
-                        }
-                    });
+           let svc = service_fn(router);
 
             let svc = ServiceBuilder::new().layer_fn(Logger::new).service(svc);
             let svc = ServiceBuilder::new().layer_fn(|inner| OriginValidation::new(inner, addr.to_string(), Arc::clone(&config.trusted_origins))).service(svc);

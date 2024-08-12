@@ -13,7 +13,6 @@ use crate::models::app::AppConfig;
 use crate::util::graceful_util::get_graceful_signal;
 
 mod models;
-mod handler;
 mod util;
 mod http;
 
@@ -58,7 +57,7 @@ pub async fn get_app_config() -> &'static AppConfig {
 async fn main() -> std::io::Result<()> {
     let config: &AppConfig = get_app_config().await;
 
-    let addr: SocketAddr = SocketAddr::from(([127, 0, 0, 1], config.port));
+    let addr: SocketAddr = SocketAddr::from(([0, 0, 0, 0], config.port));
     let listener: TcpListener = TcpListener::bind(addr).await?;
 
     let (shutdown_tx, mut shutdown_rx) = watch::channel(());

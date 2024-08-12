@@ -1,7 +1,7 @@
 use bytes::Bytes;
 use http_body_util::{combinators::BoxBody, BodyExt, Empty, Full};
 use hyper::{header, Error, Response, StatusCode};
-use serde_json::{json};
+use serde_json::{json, Value};
 
 pub fn empty() -> BoxBody<Bytes, Error> {
     Empty::<Bytes>::new()
@@ -24,6 +24,26 @@ pub fn send_json_error_response(
     });
 
     let body_str: String = body.to_string();
+
+    let body_bytes: Bytes = Bytes::from(body_str);
+
+    let mut resp = Response::new(full(body_bytes));
+
+    *resp.status_mut() = status_code;
+
+    resp.headers_mut().insert(
+        header::CONTENT_TYPE,
+        header::HeaderValue::from_str("application/json").unwrap(),
+    );
+
+    Ok(resp)
+}
+
+pub fn send_json_response(
+    data: Value,
+    status_code: StatusCode,
+) -> Result<Response<BoxBody<Bytes, Error>>, Error> {
+    let body_str: String = data.to_string();
 
     let body_bytes: Bytes = Bytes::from(body_str);
 

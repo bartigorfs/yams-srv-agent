@@ -7,8 +7,7 @@ use http_body_util::combinators::BoxBody;
 use hyper::{body::Incoming, Request, Response, StatusCode};
 use hyper::Error;
 use hyper::service::Service;
-
-use crate::utils::hyper_util::empty;
+use crate::util::hyper_util::empty;
 
 #[derive(Debug, Clone)]
 pub struct OriginValidation<S> {

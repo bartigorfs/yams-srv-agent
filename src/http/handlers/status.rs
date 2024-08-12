@@ -1,26 +1,14 @@
-use std::collections::HashMap;
 use std::ffi::OsString;
-use std::path::Path;
-use std::sync::Arc;
-use chrono::{DateTime, Utc};
+use bytes::Bytes;
+use http_body_util::combinators::BoxBody;
+use hyper::{Request, Response, StatusCode};
 use serde_json::{json, Value};
-use sysinfo::{Components, Disks, Networks, Pid, Process, ProcessStatus, System};
-use tiny_http::{Request, Response};
-use crate::{logger, models};
+use sysinfo::{Components, Disks, Networks, System};
+use crate::models;
+use crate::util::hyper_util::send_json_response;
 
-//let params = Url::parse(&request.uri().to_string()).unwrap().query_pairs();
-
-pub fn handle_status_request(request: Request) {
-    let utc: DateTime<Utc> = Utc::now();
-
-    let message = format!("{:?} method: {:?}, url: {:?}, headers: {:?}",
-                          utc,
-                          request.method(),
-                          request.url(),
-                          request.headers()
-    );
-
-    let mut sys = System::new_all();
+pub async fn status_handler(req: Request<hyper::body::Incoming>) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
+    let mut sys: System = System::new_all();
 
     sys.refresh_all();
 
@@ -29,7 +17,7 @@ pub fn handle_status_request(request: Request) {
     //TODO: Replace with converter
     for (.., process) in sys.processes() {
         process_info_vec.push(models::process::ProcessInfo {
-            name: process.name().parse().unwrap(),
+            name: process.name().to_string_lossy().parse().unwrap(),
             disk_usage: models::process::DiskUsage {
                 total_written_bytes: process.disk_usage().total_written_bytes,
                 written_bytes: process.disk_usage().written_bytes,
@@ -102,13 +90,7 @@ pub fn handle_status_request(request: Request) {
         });
     }
 
-    let sys_info = json!({
-        "system": {
-            "name": System::name().unwrap(),
-            "kernel_version": System::kernel_version().unwrap(),
-            "os_version": System::os_version().unwrap(),
-            "host_name": System::host_name().unwrap(),
-        },
+    let sys_info: Value = json!({
         "memory": {
             "total": sys.total_memory(),
             "used": sys.used_memory(),
@@ -124,9 +106,5 @@ pub fn handle_status_request(request: Request) {
         "components": components_vec,
     });
 
-
-    let mut response = Response::from_string(sys_info.to_string());
-    response.add_header(models::JSON_HEADER.clone());
-
-    request.respond(response).expect("TODO: panic message");
+    send_json_response(sys_info, StatusCode::OK)
 }

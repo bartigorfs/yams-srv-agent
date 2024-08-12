@@ -1,3 +1,4 @@
+use std::ffi::OsStr;
 use std::path::Path;
 use serde::Serialize;
 use sysinfo::ProcessStatus as SysProcessStatus;
