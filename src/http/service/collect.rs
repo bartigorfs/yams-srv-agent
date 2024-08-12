@@ -8,7 +8,7 @@ pub async fn collect_process_info(sys: &mut System) -> Vec<models::process::Proc
 
     sys.refresh_processes_specifics(
         ProcessesToUpdate::All,
-        ProcessRefreshKind::new().with_cpu(),
+        ProcessRefreshKind::new().with_cpu().with_disk_usage().with_memory(),
     );
 
     let mut process_info_vec: Vec<models::process::ProcessInfo> = Vec::new();

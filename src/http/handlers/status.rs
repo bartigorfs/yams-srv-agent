@@ -21,6 +21,7 @@ pub async fn status_handler(req: Request<hyper::body::Incoming>) -> Result<Respo
     let disks_vec: Vec<DiskInner> = collect_disk_info(&sys);
     let components_vec: Vec<Component> = collect_component_info(&sys);
     let generic_info: GenericInfo = collect_memory_info(&sys);
+
     let process_info_vec: Vec<ProcessInfo> = collect_process_info(&mut sys).await;
 
     let mut sys_info: Value = json!({
