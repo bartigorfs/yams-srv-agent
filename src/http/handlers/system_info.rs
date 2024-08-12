@@ -1,12 +1,9 @@
-use std::sync::Arc;
 use bytes::Bytes;
 use http_body_util::combinators::BoxBody;
 use hyper::{Request, Response, StatusCode};
 use serde_json::json;
 use sysinfo::System;
 use crate::util::hyper_util::send_json_response;
-
-//let params = Url::parse(&request.uri().to_string()).unwrap().query_pairs();
 
 pub async fn system_info_handler(req: Request<hyper::body::Incoming>) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
     let response = json!({

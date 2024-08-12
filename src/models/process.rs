@@ -59,6 +59,7 @@ pub struct ProcessInfo<'a> {
     pub(crate) disk_usage: DiskUsage,
     pub(crate) cpu_usage: f32,
     pub(crate) mem_usage: u64,
+    pub(crate) pid: usize,
     pub(crate) virt_mem_usage: u64,
     pub(crate) proc_path: Option<&'a Path>,
     pub(crate) parent_pid: Option<u32>,
