@@ -6,7 +6,6 @@ use futures::future::BoxFuture;
 use futures::FutureExt;
 use http_body_util::combinators::BoxBody;
 use hyper::{body::Incoming, Request, Response, service::Service};
-use url::form_urlencoded::Parse;
 use url::Url;
 
 #[derive(Debug, Clone)]

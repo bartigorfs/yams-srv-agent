@@ -40,11 +40,16 @@ lazy_static! {
             .map(|origin| origin.to_string())
             .collect();
 
+        let totp_secret: String = env::var("TOTP_SECRET")
+            .expect("TOTP_SECRET must be set.")
+            .parse()
+            .unwrap();
 
          AppConfig {
             trusted_origins: Arc::new(trusted_origins),
             host: host_array,
             port: app_port,
+            totp_secret,
         }
     };
 }
