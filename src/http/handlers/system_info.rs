@@ -5,7 +5,7 @@ use serde_json::json;
 use sysinfo::System;
 use crate::util::hyper_util::send_json_response;
 
-pub async fn system_info_handler(req: Request<hyper::body::Incoming>) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
+pub async fn system_info_handler() -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
     let response = json!({
         "system": {
         "name": System::name().unwrap(),

@@ -40,7 +40,7 @@ pub async fn collect_process_info(sys: &mut System) -> Vec<models::process::Proc
     process_info_vec
 }
 // Функция для сбора информации о дисках
-pub fn collect_disk_info(sys: &System) -> Vec<models::disks::DiskInner> {
+pub fn collect_disk_info() -> Vec<models::disks::DiskInner> {
     let disks: Disks = Disks::new_with_refreshed_list();
     let mut disks_vec: Vec<models::disks::DiskInner> = vec![];
 
@@ -60,7 +60,7 @@ pub fn collect_disk_info(sys: &System) -> Vec<models::disks::DiskInner> {
 }
 
 // Функция для сбора информации о сетях
-pub fn collect_network_info(sys: &System) -> Vec<models::networks::NetworksInner> {
+pub fn collect_network_info() -> Vec<models::networks::NetworksInner> {
     let networks: Networks = Networks::new_with_refreshed_list();
     let mut networks_vec: Vec<models::networks::NetworksInner> = vec![];
 
@@ -90,11 +90,11 @@ pub fn collect_network_info(sys: &System) -> Vec<models::networks::NetworksInner
 }
 
 // Функция для сбора информации о компонентах
-pub fn collect_component_info(sys: &System) -> Vec<models::components::Component> {
+pub fn collect_component_info() -> Vec<models::components::Component> {
     let components: Components = Components::new_with_refreshed_list();
     let mut components_vec: Vec<models::components::Component> = vec![];
 
-    for (component) in &components {
+    for component in &components {
         components_vec.push(models::components::Component {
             temperature: component.temperature(),
             max: component.max(),

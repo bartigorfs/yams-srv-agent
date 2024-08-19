@@ -1,16 +1,14 @@
-use std::collections::HashSet;
-use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
-use otpauth::TOTP;
 
 use bytes::Bytes;
-use bytes_utils::Str;
 use futures::future::{BoxFuture, FutureExt};
 use http_body_util::combinators::BoxBody;
 use hyper::{body::Incoming, Request, Response, StatusCode};
 use hyper::Error;
 use hyper::http::HeaderValue;
 use hyper::service::Service;
+use otpauth::TOTP;
+
 use crate::util::hyper_util::empty;
 
 #[derive(Debug, Clone)]

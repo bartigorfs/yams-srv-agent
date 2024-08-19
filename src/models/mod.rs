@@ -1,7 +1,6 @@
 use std::str::FromStr;
-use std::string::ToString;
 use ascii::AsciiString;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize};
 
 pub mod process;
 pub mod disks;
