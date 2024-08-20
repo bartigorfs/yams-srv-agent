@@ -17,8 +17,8 @@ pub async fn status_handler(req: Request<hyper::body::Incoming>) -> Result<Respo
     let mut sys: System = System::new_all();
     sys.refresh_all();
 
-    let disks_vec: Vec<DiskInner> = collect_disk_info(&sys);
-    let components_vec: Vec<Component> = collect_component_info(&sys);
+    let disks_vec: Vec<DiskInner> = collect_disk_info();
+    let components_vec: Vec<Component> = collect_component_info();
     let generic_info: GenericInfo = collect_memory_info(&sys);
 
     let process_info_vec: Vec<ProcessInfo> = collect_process_info(&mut sys).await;
@@ -38,7 +38,7 @@ pub async fn status_handler(req: Request<hyper::body::Incoming>) -> Result<Respo
     if let Some(params) = req.extensions().get::<HashMap<String, String>>() {
         if let Some(network) = params.get("include") {
             if network == "network" {
-                sys_info["networks"] = serde_json::to_value(collect_network_info(&sys)).unwrap_or_else(|_| json!(null));
+                sys_info["networks"] = serde_json::to_value(collect_network_info()).unwrap_or_else(|_| json!(null));
             }
         }
     }

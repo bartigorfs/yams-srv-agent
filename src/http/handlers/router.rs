@@ -11,7 +11,7 @@ pub async fn router(
     match (req.method(), req.uri().path()) {
         (&Method::GET, "/health") => send_empty_ok(),
 
-        (&Method::GET, "/system-info") => system_info_handler(req).await,
+        (&Method::GET, "/system-info") => system_info_handler().await,
 
         (&Method::GET, "/status") => status_handler(req).await,
 

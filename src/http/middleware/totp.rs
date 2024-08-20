@@ -41,7 +41,7 @@ where
         fn get_unauthorized_resp() -> Response<BoxBody<Bytes, Error>> {
             let mut resp = Response::new(empty());
             *resp.status_mut() = StatusCode::UNAUTHORIZED;
-            return resp;
+            resp
         }
 
         match req.headers().get("Authorization").and_then(|header: &HeaderValue| header.to_str().ok()) {
@@ -59,7 +59,7 @@ where
 
                     if totp.verify(totp_token, period, current_timestamp) {
                         let fut = self.inner.call(req);
-                        return fut.boxed();
+                        fut.boxed()
                     } else {
                         futures::future::ok(get_unauthorized_resp()).boxed()
                     }
