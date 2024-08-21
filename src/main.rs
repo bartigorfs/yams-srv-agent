@@ -45,6 +45,8 @@ lazy_static! {
             .parse()
             .unwrap();
 
+        println!("{}" ,totp_secret);
+
          AppConfig {
             trusted_origins: Arc::new(trusted_origins),
             host: host_array,

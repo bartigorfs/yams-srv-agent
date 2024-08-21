@@ -29,8 +29,8 @@ pub async fn run_server(
            let svc = service_fn(router);
 
             let svc = ServiceBuilder::new().layer_fn(Logger::new).service(svc);
-            let svc = ServiceBuilder::new().layer_fn(|inner| OriginValidation::new(inner, addr.to_string(), Arc::clone(&config.trusted_origins))).service(svc);
-            let svc = ServiceBuilder::new().layer_fn(|inner| TOTPCheck::new(inner, config.totp_secret.clone())).service(svc);
+            // let svc = ServiceBuilder::new().layer_fn(|inner| OriginValidation::new(inner, addr.to_string(), Arc::clone(&config.trusted_origins))).service(svc);
+            // let svc = ServiceBuilder::new().layer_fn(|inner| TOTPCheck::new(inner, config.totp_secret.clone())).service(svc);
             let svc = ServiceBuilder::new().layer_fn(QueryParams::new).service(svc);
 
             if let Err(err) = http1::Builder::new().serve_connection(io, svc).await {

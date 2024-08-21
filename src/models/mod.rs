@@ -8,6 +8,7 @@ pub mod networks;
 pub mod components;
 pub mod app;
 pub mod generic_info;
+pub mod cpu;
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct Config {
