@@ -29,3 +29,8 @@ lazy_static = "1.5.0"
 jwt = "0.16.0"
 url = "2.5.2"
 otpauth = "0.4.1"
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"

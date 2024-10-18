@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use hyper::server::conn::http1;
 use hyper::service::service_fn;
 use hyper_util::rt::TokioIo;
@@ -9,9 +7,7 @@ use tower::ServiceBuilder;
 use crate::get_app_config;
 use crate::http::handlers::router::router;
 use crate::http::middleware::logger::Logger;
-use crate::http::middleware::origin::OriginValidation;
 use crate::http::middleware::query_params::QueryParams;
-use crate::http::middleware::totp::TOTPCheck;
 use crate::models::app::AppConfig;
 
 pub async fn run_server(
